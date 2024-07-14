@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Metagri研究所クイズ</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        #quiz-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #keyword, #discord-link {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div id="quiz-container">
+        <h1>Metagri研究所クイズ</h1>
+        <div id="question"></div>
+        <div id="options"></div>
+        <div id="result"></div>
+        <div id="rank"></div>
+        <div id="keyword"></div>
+        <div id="discord-link"></div>
+    </div>
+
+    <script>
+        const quizData = [
+            {
+                question: "Metagri研究所の設立年は？",
+                options: ["2020年", "2021年", "2022年", "2023年"],
+                correct: 2
+            },
+            {
+                question: "Metagri研究所が開始したサービスの名前は？",
+                options: ["Metagri-Market", "Metagri-Marche", "Metagri-Shop", "Metagri-Store"],
+                correct: 1
+            },
+            {
+                question: "Metagriの'Meta'の意味は？",
+                options: ["変化", "成長", "革新", "超越"],
+                correct: 3
+            },
+            {
+                question: "Metagri研究所が組み合わせている技術は？",
+                options: ["AIとIoT", "ブロックチェーンとAI", "ロボット工学と量子コンピューティング", "VRとAR"],
+                correct: 1
+            },
+            {
+                question: "Metagri研究所の目的は？",
+                options: ["農業の機械化", "持続可能な農業の実現", "農産物の輸出促進", "農地の拡大"],
+                correct: 1
+            },
+            {
+                question: "Metagri研究所が推進している構想の名前は？",
+                options: ["AgriTech", "FarmFi", "GreenChain", "CropCoin"],
+                correct: 1
+            },
+            {
+                question: "Metagri研究所が活用しているWeb技術は？",
+                options: ["Web1.0", "Web2.0", "Web3.0", "Web4.0"],
+                correct: 2
+            },
+            {
+                question: "Metagri研究所の主な活動領域は？",
+                options: ["都市農業", "宇宙農業", "海洋農業", "デジタル農業"],
+                correct: 3
+            },
+            {
+                question: "Metagri研究所が注目している金融の形態は？",
+                options: ["従来の銀行融資", "クラウドファンディング", "分散型金融", "株式投資"],
+                correct: 2
+            },
+            {
+                question: "Metagri研究所の活動の中心となる場所は？",
+                options: ["実験農場", "研究室", "オンラインコミュニティ", "スマート温室"],
+                correct: 2
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let correctAnswers = 0;
+        let selectedQuestions = [];
+
+        function startQuiz() {
+            selectedQuestions = selectRandomQuestions(5);
+            currentQuestionIndex = 0;
+            correctAnswers = 0;
+            showQuestion();
+        }
+
+        function selectRandomQuestions(num) {
+            const shuffled = [...quizData].sort(() => 0.5 - Math.random());
+            return shuffled.slice(0, num);
+        }
+
+        function showQuestion() {
+            const resultElement = document.getElementById('result');
+            const rankElement = document.getElementById('rank');
+            const keywordElement = document.getElementById('keyword');
+            const discordLinkElement = document.getElementById('discord-link');
+            resultElement.textContent = '';
+            rankElement.textContent = '';
+            keywordElement.textContent = '';
+            discordLinkElement.innerHTML = '';
+
+            if (currentQuestionIndex >= selectedQuestions.length) {
+                showResults();
+                return;
+            }
+
+            const questionData = selectedQuestions[currentQuestionIndex];
+            if (!questionData) {
+                console.error('Question data is undefined');
+                showResults();
+                return;
+            }
+
+            document.getElementById('question').textContent = `問題 ${currentQuestionIndex + 1}/5: ${questionData.question}`;
+            
+            const optionsContainer = document.getElementById('options');
+            optionsContainer.innerHTML = '';
+            questionData.options.forEach((option, index) => {
+                const button = document.createElement('button');
+                button.textContent = option;
+                button.onclick = () => checkAnswer(index);
+                optionsContainer.appendChild(button);
+            });
+        }
+
+        function checkAnswer(selectedIndex) {
+            const questionData = selectedQuestions[currentQuestionIndex];
+            const resultElement = document.getElementById('result');
+            
+            if (selectedIndex === questionData.correct) {
+                correctAnswers++;
+                resultElement.textContent = '正解！';
+                resultElement.style.color = 'green';
+            } else {
+                resultElement.textContent = '不正解。正解は: ' + questionData.options[questionData.correct];
+                resultElement.style.color = 'red';
+            }
+            
+            currentQuestionIndex++;
+            setTimeout(showQuestion, 2000);
+        }
+
+        function showResults() {
+            const questionElement = document.getElementById('question');
+            const optionsElement = document.getElementById('options');
+            const resultElement = document.getElementById('result');
+            const rankElement = document.getElementById('rank');
+            const keywordElement = document.getElementById('keyword');
+            const discordLinkElement = document.getElementById('discord-link');
+
+            questionElement.textContent = '';
+            optionsElement.innerHTML = '';
+            resultElement.textContent = '';
+
+            let rank;
+            switch(correctAnswers) {
+                case 5:
+                    rank = 'ゴールドランク';
+                    break;
+                case 4:
+                    rank = 'シルバーランク';
+                    break;
+                case 3:
+                    rank = 'ブロンズランク';
+                    break;
+                default:
+                    rank = 'トライアゲインランク';
+            }
+            rankElement.textContent = `クイズ終了！あなたのランクは: ${rank}`;
+
+            if (correctAnswers === 5) {
+                keywordElement.textContent = 'キーワードは「DAAAMO」です。';
+                discordLinkElement.innerHTML = '以下のリンクにアクセスして下さい:<br><a href="https://discord.gg/XABBbabc" target="_blank">https://discord.gg/XABBbabc</a>';
+            }
+
+            const restartButton = document.createElement('button');
+            restartButton.textContent = 'もう一度挑戦する';
+            restartButton.onclick = startQuiz;
+            optionsElement.appendChild(restartButton);
+        }
+
+        // クイズを開始
+        startQuiz();
+    </script>
+</body>
+</html>
